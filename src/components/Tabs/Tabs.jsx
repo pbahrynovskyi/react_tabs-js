@@ -4,27 +4,36 @@ export const Tabs = ({ tabs, activeTabId, onTabSelected }) => {
     ? activeTabId
     : tabs[0].id;
 
+  const currentTab = tabs.find(tab => tab.id === currentActiveId) || tabs[0];
+
   return (
-    <ul>
-      {tabs.map(tab => (
-        <li
-          key={tab.id}
-          className={tab.id === currentActiveId ? 'is-active' : ''}
-          data-cy="Tab"
-        >
-          <a
-            href={`#${tab.id}`}
-            data-cy="TabLink"
-            onClick={() => {
-              if (tab.id !== currentActiveId) {
-                onTabSelected(tab.id);
-              }
-            }}
+    <>
+      <ul>
+        {tabs.map(tab => (
+          <li
+            key={tab.id}
+            className={tab.id === currentActiveId ? 'is-active' : ''}
+            data-cy="Tab"
           >
-            {tab.title}
-          </a>
-        </li>
-      ))}
-    </ul>
+            <a
+              href={`#${tab.id}`}
+              data-cy="TabLink"
+              onClick={event => {
+                event.preventDefault();
+                if (tab.id !== currentActiveId) {
+                  onTabSelected(tab.id);
+                }
+              }}
+            >
+              {tab.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div className="block" data-cy="TabContent">
+        {currentTab.content}
+      </div>
+    </>
   );
 };
